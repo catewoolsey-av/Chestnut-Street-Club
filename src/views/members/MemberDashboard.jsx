@@ -9,6 +9,11 @@ const MemberDashboard = ({ members, sessions, deals: allDeals, announcements, av
   // Deals archived on the admin side shouldn't surface on the member dashboard either.
   const deals = allDeals.filter(d => !d.archived_at);
 
+  // Club President always leads the AV Team row, regardless of insertion order.
+  const sortedAvTeam = [...avTeam].sort((a, b) =>
+    (a.club_role === 'Club President' ? 0 : 1) - (b.club_role === 'Club President' ? 0 : 1)
+  );
+
   // Filter and sort upcoming sessions by date, get the most upcoming one
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -133,7 +138,7 @@ const MemberDashboard = ({ members, sessions, deals: allDeals, announcements, av
           <>
             <div className="border-t border-white/20 my-4"></div>
             <div className="flex flex-wrap gap-6">
-              {avTeam.map((member) => (
+              {sortedAvTeam.map((member) => (
                 <div 
                   key={member.id} 
                   className="flex flex-col items-center cursor-pointer"
